@@ -11,7 +11,7 @@ def search(term, num_results=10, lang="en", verbose=False):
     def fetch_results(search_term, number_results, language_code, start_num=0):
         escaped_search_term = search_term.replace(' ', '+')
 
-        google_url = 'https://www.google.com/search?q={}&num={}&hl={}&start={}'.format(escaped_search_term, number_results+1,
+        google_url = 'https://www.google.com/search?q={}&num={}&hl={}&start={}&filter=0'.format(escaped_search_term, number_results+1,
                                                                                        language_code, start_num)
         response = get(google_url, headers=usr_agent)
         response.raise_for_status()
