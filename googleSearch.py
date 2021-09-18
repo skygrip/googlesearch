@@ -6,13 +6,6 @@ from googlesearch import search
 
 #%%
 ##############
-# Settings
-##############
-
-verbose = True
-
-#%%
-##############
 # User Input
 ##############
 
@@ -39,7 +32,8 @@ if str(input("Is this correct?' (y/n): ")).lower().strip() != 'y':
 
 print("Fetching Results from Google")
 search_results = pandas.DataFrame(search(query,
-                            num_results=num_results, verbose=verbose))
+                            num_results=num_results))
+                            
 #%%
 ##############
 #Save Results
