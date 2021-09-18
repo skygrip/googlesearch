@@ -1,19 +1,29 @@
-from requests import get
 from bs4 import BeautifulSoup
 import math
 
 
 def search(term, num_results=10, lang="en", verbose=False):
+from requests import get
+
+
+def search(term, num_results=10, lang="en", proxy=None):
     usr_agent = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/61.0.3163.100 Safari/537.36'}
 
-    def fetch_results(search_term, number_results, language_code, start_num=0):
+    def fetch_results(search_term, number_results, language_code, start_num=0, filter_results=0):
         escaped_search_term = search_term.replace(' ', '+')
 
-        google_url = 'https://www.google.com/search?q={}&num={}&hl={}&start={}&filter=0'.format(escaped_search_term, number_results+1,
-                                                                                       language_code, start_num)
-        response = get(google_url, headers=usr_agent)
+        google_url = 'https://www.google.com/search?q={}&num={}&hl={}&start={}&filter={})'.format(escaped_search_term, number_results+1,
+                                                                                       language_code, start_num, filter_results)
+        proxies = None
+        if proxy:
+            if proxy[:5]=="https":
+                proxies = {"https":proxy} 
+            else:
+                proxies = {"http":proxy}
+        
+        response = get(google_url, headers=usr_agent, proxies=proxies)    
         response.raise_for_status()
 
         return response.text
