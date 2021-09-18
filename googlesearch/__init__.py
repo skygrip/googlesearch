@@ -1,10 +1,6 @@
 from bs4 import BeautifulSoup
-import math
-
-
-def search(term, num_results=10, lang="en", verbose=False):
 from requests import get
-
+import math
 
 def search(term, num_results=10, lang="en", proxy=None):
     usr_agent = {
