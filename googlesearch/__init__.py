@@ -2,12 +2,19 @@ from bs4 import BeautifulSoup
 from requests import get
 import math
 
-def search(term, num_results=10, lang="en", proxy=None):
+def search(term: str, num_results:int=10, lang: str="en", proxy: str="None", filter_results: bool=True):
+
     usr_agent = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/61.0.3163.100 Safari/537.36'}
 
-    def fetch_results(search_term, number_results, language_code, start_num=0, filter_results=0):
+    def fetch_results(search_term: str , number_results: int, language_code: str, filter_results: bool, start_num: int = 0):
+        
+        if filter_results==False:
+            filter_results=0
+        else:
+            filter_results=1
+
         escaped_search_term = search_term.replace(' ', '+')
 
         google_url = 'https://www.google.com/search?q={}&num={}&hl={}&start={}&filter={})'.format(escaped_search_term, number_results+1,
@@ -39,21 +46,15 @@ def search(term, num_results=10, lang="en", proxy=None):
         for i in range(rounds):
             start_num = i*100
             results_temp=list()
-            if verbose:
-                print(f"fetching results {start_num} of {num_results}")
-            html = fetch_results(term, 100, lang, start_num)
+            html = fetch_results(term, 100, lang, start_num, filter_results)
             results_temp = list(parse_results(html))
             if len(results_temp) < 100:
-                print(
-                    f"only {len(results_temp)} returned, breaking as next page will have no results")
                 results.extend(results_temp)
                 break
             results.extend(results_temp)
 
     else:
-        html = fetch_results(term, num_results, lang)
+        html = fetch_results(term, num_results, lang, filter_results)
         results = list(parse_results(html))
 
-    if verbose:
-        print(f"Results: {len(results)}")
     return results
